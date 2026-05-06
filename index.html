@@ -13,9 +13,8 @@
             --whatsapp: #25D366;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--bg); color: var(--text-h); line-height: 1.8; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text-h); line-height: 1.8; overflow-x: hidden; padding-bottom: 80px; }
         
-        /* Nav */
         nav {
             padding: 1rem 8%; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border); position: sticky; top: 0;
@@ -24,14 +23,12 @@
         .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; }
         .btn-admin { background: var(--accent); color: #000; padding: 8px 16px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; font-size: 12px; }
 
-        /* Main Content */
         .wrapper { max-width: 800px; margin: 40px auto; padding: 0 20px; }
         .post-card { 
             background: var(--surface); border: 1px solid var(--border); 
             padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        /* Styling Postingan */
         .post-content { color: #e0e0e0; font-size: 1.05rem; white-space: pre-wrap; word-wrap: break-word; }
         .post-content a { color: #58a6ff; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
         .post-content a:hover { border-bottom: 1px solid #58a6ff; }
@@ -42,18 +39,30 @@
         }
         .post-content code { background: #222; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff79c6; }
 
-        /* Admin UI */
         #editArea { width: 100%; min-height: 600px; background: #000; color: #fff; border: 1px solid #333; padding: 20px; border-radius: 12px; display: none; margin-top: 20px; font-size: 14px; line-height: 1.5; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .modal-box { background: #111; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #222; text-align: center; }
         input { width: 100%; padding: 12px; margin: 15px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; text-align: center; }
         
-        .save-bar { position: fixed; bottom: 20px; right: 20px; display: none; gap: 10px; }
+        .save-bar { position: fixed; bottom: 20px; left: 20px; display: none; gap: 10px; z-index: 200; }
         .btn-save { background: #25D366; color: #000; padding: 12px 25px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
 
-        footer { padding: 40px; text-align: center; color: #444; font-size: 12px; border-top: 1px solid var(--border); margin-top: 60px; }
+        /* Music Player Style */
+        .music-player {
+            position: fixed; bottom: 20px; right: 20px;
+            background: rgba(15, 15, 15, 0.9); border: 1px solid var(--border);
+            padding: 10px 15px; border-radius: 12px; display: flex; align-items: center;
+            gap: 12px; backdrop-filter: blur(10px); z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .music-info { display: flex; flex-direction: column; }
+        .music-title { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; width: 80px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .music-time { font-size: 9px; color: var(--text-p); font-family: monospace; }
+        .music-btns { display: flex; align-items: center; gap: 8px; }
+        .music-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
+        .music-btn:hover { color: var(--whatsapp); }
 
-        @media (max-width: 600px) { .post-card { padding: 20px; } .logo { font-size: 0.9rem; } }
+        footer { padding: 40px; text-align: center; color: #444; font-size: 12px; border-top: 1px solid var(--border); margin-top: 60px; }
     </style>
 </head>
 <body>
@@ -65,7 +74,6 @@
 
     <div class="wrapper">
         <div class="post-card">
-            <!-- AREA TEKS ASLI (TIDAK BERUBAH) -->
             <div id="displayArea" class="post-content">
 *TIPS JIKA TIBA-TIBA TERKENA BANNED 2026❗*
 
@@ -200,13 +208,24 @@ https://channel.whatsapp.com/
 * XynnHd
 * XynaTzy
 * Seluruh Member VYN</div>
-            
-            <!-- AREA EDIT (HANYA ADMIN) -->
             <textarea id="editArea"></textarea>
         </div>
     </div>
 
-    <!-- Modal Login -->
+    <!-- Music Player HTML -->
+    <div class="music-player">
+        <div class="music-btns">
+            <button class="music-btn" onclick="prevSong()"><i data-lucide="skip-back" size="14"></i></button>
+            <button class="music-btn" onclick="togglePlay()" id="playBtn"><i data-lucide="play" size="18"></i></button>
+            <button class="music-btn" onclick="nextSong()"><i data-lucide="skip-forward" size="14"></i></button>
+        </div>
+        <div class="music-info">
+            <div class="music-title" id="trackTitle">Track 1</div>
+            <div class="music-time"><span id="currTime">0:00</span> / <span id="durTime">0:00</span></div>
+        </div>
+        <audio id="mainAudio"></audio>
+    </div>
+
     <div class="modal" id="loginModal">
         <div class="modal-box">
             <h3 style="margin-bottom:10px">Otorisasi Sesi</h3>
@@ -216,7 +235,6 @@ https://channel.whatsapp.com/
         </div>
     </div>
 
-    <!-- Tombol Simpan -->
     <div class="save-bar" id="saveBar">
         <button class="btn-save" onclick="saveGlobal()">Simpan & Publikasikan</button>
     </div>
@@ -228,29 +246,86 @@ https://channel.whatsapp.com/
     <script>
         lucide.createIcons();
         
-        // Link Detection & Markdown Simple
+        // Music Logic
+        const audio = document.getElementById('mainAudio');
+        const playBtn = document.getElementById('playBtn');
+        const trackTitle = document.getElementById('trackTitle');
+        const currTimeTxt = document.getElementById('currTime');
+        const durTimeTxt = document.getElementById('durTime');
+        
+        const playlist = [
+            { title: "Track 1", url: "https://files.catbox.moe/rbt6re.mp3" },
+            { title: "Track 2", url: "https://files.catbox.moe/bl2yqg.mp3" }
+        ];
+        
+        let currentTrack = 0;
+
+        function loadTrack(idx) {
+            audio.src = playlist[idx].url;
+            trackTitle.innerText = playlist[idx].title;
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = '<i data-lucide="pause" size="18"></i>';
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '<i data-lucide="play" size="18"></i>';
+            }
+            lucide.createIcons();
+        }
+
+        function nextSong() {
+            currentTrack = (currentTrack + 1) % playlist.length;
+            loadTrack(currentTrack);
+            audio.play();
+            playBtn.innerHTML = '<i data-lucide="pause" size="18"></i>';
+            lucide.createIcons();
+        }
+
+        function prevSong() {
+            currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+            loadTrack(currentTrack);
+            audio.play();
+            playBtn.innerHTML = '<i data-lucide="pause" size="18"></i>';
+            lucide.createIcons();
+        }
+
+        audio.ontimeupdate = () => {
+            const cur = Math.floor(audio.currentTime);
+            const dur = Math.floor(audio.duration || 0);
+            currTimeTxt.innerText = formatTime(cur);
+            durTimeTxt.innerText = formatTime(dur);
+        };
+
+        function formatTime(sec) {
+            let m = Math.floor(sec / 60);
+            let s = sec % 60;
+            return m + ":" + (s < 10 ? "0" + s : s);
+        }
+
+        audio.onended = () => nextSong();
+
+        // Load First Song
+        loadTrack(currentTrack);
+
+        // Text Logic
         function formatText(text) {
-            // Convert Links
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             let formatted = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
-            // Bold
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-            // Italic
             formatted = formatted.replace(/\*(.*?)\*/g, '<i>$1</i>');
-            // Code
             formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
-            // Blockquote
             formatted = formatted.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
             return formatted;
         }
 
-        // Initialize Content
         const displayArea = document.getElementById('displayArea');
         const savedData = localStorage.getItem('global_post');
         if(savedData) {
             displayArea.innerHTML = formatText(savedData);
         } else {
-            // Format teks awal saat pertama kali buka
             displayArea.innerHTML = formatText(displayArea.innerText);
         }
 
@@ -275,17 +350,12 @@ https://channel.whatsapp.com/
 
         function saveGlobal() {
             const newContent = document.getElementById('editArea').value;
-            // Di Vercel murni, kita pakai localStorage. 
-            // Untuk benar-benar dilihat orang lain, Anda harus mengedit file index.html ini
-            // dan mem-push ke GitHub setiap ada perubahan teks.
             localStorage.setItem('global_post', newContent);
-            
             displayArea.innerHTML = formatText(newContent);
             displayArea.style.display = 'block';
             document.getElementById('editArea').style.display = 'none';
             document.getElementById('saveBar').style.display = 'none';
-            
-            alert('Berhasil! Ingat: Di Vercel Statis, perubahaan permanen publik dilakukan dengan Update Code di GitHub.');
+            alert('Konten berhasil diupdate di browser ini!');
         }
     </script>
 </body>
