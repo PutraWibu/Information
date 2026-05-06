@@ -11,6 +11,8 @@
             --bg: #000000; --surface: #0a0a0a; --border: #1a1a1a;
             --accent: #ffffff; --text-p: #999999; --text-h: #ffffff;
             --whatsapp: #25D366;
+            --blue: #00aaff;
+            --yellow: #ffcc00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text-h); line-height: 1.8; overflow-x: hidden; padding-bottom: 80px; }
@@ -32,12 +34,18 @@
         .post-content { color: #e0e0e0; font-size: 1.05rem; white-space: pre-wrap; word-wrap: break-word; }
         .post-content a { color: #58a6ff; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
         .post-content a:hover { border-bottom: 1px solid #58a6ff; }
+        
+        .text-green { color: var(--whatsapp); font-weight: 700; }
+        .text-blue { color: var(--blue); font-weight: 700; }
+        .text-yellow { color: var(--yellow); font-weight: 700; }
+        .tag-header { color: #ff5555; font-weight: 800; letter-spacing: 1px; }
+
         .post-content b, .post-content strong { color: var(--accent); font-weight: 700; }
         .post-content blockquote { 
-            background: #111; border-left: 4px solid var(--accent); 
+            background: #111; border-left: 4px solid var(--whatsapp); 
             padding: 15px; margin: 20px 0; border-radius: 4px; color: #bbb; font-style: italic;
         }
-        .post-content code { background: #222; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff79c6; }
+        .post-content code { background: #222; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: var(--whatsapp); }
 
         #editArea { width: 100%; min-height: 600px; background: #000; color: #fff; border: 1px solid #333; padding: 20px; border-radius: 12px; display: none; margin-top: 20px; font-size: 14px; line-height: 1.5; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
@@ -53,10 +61,23 @@
             background: rgba(15, 15, 15, 0.9); border: 1px solid var(--border);
             padding: 10px 15px; border-radius: 12px; display: flex; align-items: center;
             gap: 12px; backdrop-filter: blur(10px); z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
+            max-width: 200px;
         }
-        .music-info { display: flex; flex-direction: column; }
-        .music-title { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; width: 80px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .music-info { display: flex; flex-direction: column; width: 100px; overflow: hidden; }
+        
+        /* Judul Bergerak CSS */
+        .marquee {
+            white-space: nowrap;
+            display: inline-block;
+            animation: marquee 10s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .music-title { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
         .music-time { font-size: 9px; color: var(--text-p); font-family: monospace; }
         .music-btns { display: flex; align-items: center; gap: 8px; }
         .music-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
@@ -212,7 +233,6 @@ https://channel.whatsapp.com/
         </div>
     </div>
 
-    <!-- Music Player HTML -->
     <div class="music-player">
         <div class="music-btns">
             <button class="music-btn" onclick="prevSong()"><i data-lucide="skip-back" size="14"></i></button>
@@ -220,7 +240,7 @@ https://channel.whatsapp.com/
             <button class="music-btn" onclick="nextSong()"><i data-lucide="skip-forward" size="14"></i></button>
         </div>
         <div class="music-info">
-            <div class="music-title" id="trackTitle">Track 1</div>
+            <div class="music-title"><span id="trackTitle" class="marquee">Track 1</span></div>
             <div class="music-time"><span id="currTime">0:00</span> / <span id="durTime">0:00</span></div>
         </div>
         <audio id="mainAudio"></audio>
@@ -246,7 +266,6 @@ https://channel.whatsapp.com/
     <script>
         lucide.createIcons();
         
-        // Music Logic
         const audio = document.getElementById('mainAudio');
         const playBtn = document.getElementById('playBtn');
         const trackTitle = document.getElementById('trackTitle');
@@ -263,6 +282,10 @@ https://channel.whatsapp.com/
         function loadTrack(idx) {
             audio.src = playlist[idx].url;
             trackTitle.innerText = playlist[idx].title;
+            // Reset Marquee Animation
+            trackTitle.style.animation = 'none';
+            trackTitle.offsetHeight; /* trigger reflow */
+            trackTitle.style.animation = null;
         }
 
         function togglePlay() {
@@ -306,19 +329,20 @@ https://channel.whatsapp.com/
         }
 
         audio.onended = () => nextSong();
-
-        // Load First Song
         loadTrack(currentTrack);
 
-        // Text Logic
         function formatText(text) {
             const urlRegex = /(https?:\/\/[^\s]+)/g;
-            let formatted = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
-            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-            formatted = formatted.replace(/\*(.*?)\*/g, '<i>$1</i>');
-            formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
-            formatted = formatted.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
-            return formatted;
+            let res = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+            res = res.replace(/&lt;\\ (.*?) \\&gt;/g, '<span class="text-green">&lt;\\ $1 \\&gt;</span>');
+            res = res.replace(/<\\ (.*?) \\>/g, '<span class="text-green">&lt;\\ $1 \\&gt;</span>');
+            res = res.replace(/\[ (.*?) \]/g, '<span class="text-blue">[ $1 ]</span>');
+            res = res.replace(/\*# Alert ❗\*/g, '<span class="tag-header">*# Alert ❗*</span>');
+            res = res.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            res = res.replace(/\*(.*?)\*/g, '<span class="text-yellow"><i>$1</i></span>');
+            res = res.replace(/`(.*?)`/g, '<code>$1</code>');
+            res = res.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+            return res;
         }
 
         const displayArea = document.getElementById('displayArea');
@@ -355,7 +379,7 @@ https://channel.whatsapp.com/
             displayArea.style.display = 'block';
             document.getElementById('editArea').style.display = 'none';
             document.getElementById('saveBar').style.display = 'none';
-            alert('Konten berhasil diupdate di browser ini!');
+            alert('Konten berhasil diperbarui!');
         }
     </script>
 </body>
