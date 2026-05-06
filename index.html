@@ -62,15 +62,15 @@
             padding: 10px 15px; border-radius: 12px; display: flex; align-items: center;
             gap: 12px; backdrop-filter: blur(10px); z-index: 1000;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
-            max-width: 200px;
+            max-width: 250px;
         }
-        .music-info { display: flex; flex-direction: column; width: 100px; overflow: hidden; }
+        .music-info { display: flex; flex-direction: column; width: 120px; overflow: hidden; position: relative; }
         
-        /* Judul Bergerak CSS */
+        /* Judul Bergerak Lebih Lambat (20 detik) */
         .marquee {
             white-space: nowrap;
             display: inline-block;
-            animation: marquee 10s linear infinite;
+            animation: marquee 20s linear infinite;
         }
         @keyframes marquee {
             0% { transform: translateX(100%); }
@@ -282,9 +282,8 @@ https://channel.whatsapp.com/
         function loadTrack(idx) {
             audio.src = playlist[idx].url;
             trackTitle.innerText = playlist[idx].title;
-            // Reset Marquee Animation
             trackTitle.style.animation = 'none';
-            trackTitle.offsetHeight; /* trigger reflow */
+            trackTitle.offsetHeight;
             trackTitle.style.animation = null;
         }
 
