@@ -3,175 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PutraMods Informations | Professional</title>
+    <title>PutraMods Informations | WhatsApp Alert 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --bg: #050505; --surface: #0f0f0f; --border: #1f1f1f;
-            --accent: #ffffff; --text-p: #888888; --text-h: #ffffff;
-            --transition: all 0.3s ease;
+            --bg: #000000; --surface: #0a0a0a; --border: #1a1a1a;
+            --accent: #ffffff; --text-p: #999999; --text-h: #ffffff;
+            --whatsapp: #25D366;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--bg); color: var(--text-h); line-height: 1.6; }
+        body { background: var(--bg); color: var(--text-h); line-height: 1.8; overflow-x: hidden; }
         
+        /* Nav */
         nav {
-            padding: 1.2rem 8%; display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 8%; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border); position: sticky; top: 0;
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); z-index: 100;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); z-index: 100;
         }
-        .logo { font-weight: 800; font-size: 1.2rem; text-transform: uppercase; }
-        .btn-admin {
-            background: var(--accent); color: var(--bg); padding: 10px 20px;
-            border-radius: 100px; font-weight: 700; border: none; cursor: pointer;
+        .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; }
+        .btn-admin { background: var(--accent); color: #000; padding: 8px 16px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; font-size: 12px; }
+
+        /* Main Content */
+        .wrapper { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .post-card { 
+            background: var(--surface); border: 1px solid var(--border); 
+            padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        .wrapper { max-width: 800px; margin: 60px auto; padding: 0 24px; }
-        .title { font-size: 3.5rem; font-weight: 800; margin-bottom: 30px; letter-spacing: -2px; }
-        
-        /* Box Postingan */
-        .content-card {
-            background: var(--surface); border: 1px solid var(--border);
-            padding: 40px; border-radius: 24px; position: relative;
+        /* Styling Postingan */
+        .post-content { color: #e0e0e0; font-size: 1.05rem; white-space: pre-wrap; word-wrap: break-word; }
+        .post-content a { color: #58a6ff; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .post-content a:hover { border-bottom: 1px solid #58a6ff; }
+        .post-content b, .post-content strong { color: var(--accent); font-weight: 700; }
+        .post-content blockquote { 
+            background: #111; border-left: 4px solid var(--accent); 
+            padding: 15px; margin: 20px 0; border-radius: 4px; color: #bbb; font-style: italic;
         }
-        #postContent { white-space: pre-line; color: #ccc; font-size: 1.1rem; }
-        
-        /* Textarea saat edit */
-        #editArea {
-            width: 100%; min-height: 200px; background: #000; color: #fff;
-            border: 1px solid #444; padding: 15px; border-radius: 12px;
-            display: none; font-size: 1.1rem; resize: vertical;
-        }
+        .post-content code { background: #222; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff79c6; }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center; z-index: 1000;
-        }
-        .modal-card {
-            background: var(--surface); width: 90%; max-width: 400px;
-            padding: 30px; border-radius: 24px; border: 1px solid var(--border); text-align: center;
-        }
-        input {
-            width: 100%; padding: 15px; margin: 20px 0; background: #000;
-            border: 1px solid var(--border); border-radius: 12px; color: #fff; text-align: center;
-        }
-        .btn-action {
-            width: 100%; padding: 15px; border-radius: 12px; border: none;
-            font-weight: 700; cursor: pointer; background: var(--accent); color: var(--bg);
-        }
+        /* Admin UI */
+        #editArea { width: 100%; min-height: 600px; background: #000; color: #fff; border: 1px solid #333; padding: 20px; border-radius: 12px; display: none; margin-top: 20px; font-size: 14px; line-height: 1.5; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-box { background: #111; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #222; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; text-align: center; }
         
-        .admin-dashboard { display: none; }
-        .is-logged-in .login-form { display: none; }
-        .is-logged-in .admin-dashboard { display: block; }
+        .save-bar { position: fixed; bottom: 20px; right: 20px; display: none; gap: 10px; }
+        .btn-save { background: #25D366; color: #000; padding: 12px 25px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
 
-        footer { text-align: center; padding: 40px; color: var(--text-p); font-size: 13px; }
+        footer { padding: 40px; text-align: center; color: #444; font-size: 12px; border-top: 1px solid var(--border); margin-top: 60px; }
+
+        @media (max-width: 600px) { .post-card { padding: 20px; } .logo { font-size: 0.9rem; } }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">PutraMods</div>
-        <button class="btn-admin" onclick="openModal()">Admin</button>
+        <div class="logo">PUTRAMODS INFORMATIONS</div>
+        <button class="btn-admin" onclick="openModal()"><i data-lucide="shield-lock" size="14" style="vertical-align:middle; margin-right:5px"></i> ADMIN</button>
     </nav>
 
     <div class="wrapper">
-        <h1 class="title">Informations</h1>
-        
-        <div class="content-card">
-            <!-- Teks Berita -->
-            <div id="postContent">Memuat konten...</div>
-            <!-- Input Edit (Sembunyi secara default) -->
-            <textarea id="editArea"></textarea>
+        <div class="post-card">
+            <!-- AREA TEKS ASLI (TIDAK BERUBAH) -->
+            <div id="displayArea" class="post-content">
+*TIPS JIKA TIBA-TIBA TERKENA BANNED 2026❗*
+
+**✍🏻WRITER:** PutraModsTzy
+**🔍SUMBER INFORMASI:** VYN GROUP
+
+---
+
+*# Alert ❗*
+Kami dari tim VYN menemukan adanya kejanggalan pada sistem deteksi pelanggaran WhatsApp. Dalam beberapa kondisi, sistem ini berpotensi mengalami kesalahan deteksi yang dapat menyebabkan banned permanen, bahkan tanpa aktivitas pelanggaran yang jelas dari pengguna.
+
+*[ Pembuka ]*
+Berdasarkan hasil analisa kami, sistem WhatsApp yang menggunakan enkripsi end-to-end memiliki keterbatasan dalam proses peninjauan isi chat dan media. Hal ini berpotensi menyebabkan kesalahan dalam mengidentifikasi pelanggaran.
+Dalam kondisi tertentu, akun dapat dianggap melanggar Panduan Komunitas WhatsApp meskipun pengguna tidak melakukan pelanggaran secara sengaja. Oleh karena itu, diperlukan kehati-hatian dalam merespons kondisi banned, terutama saat menggunakan fitur Minta Tinjau.
+
+*[ Permasalahan ]*
+Saat nomor dinonaktifkan oleh WhatsApp, terdapat dua kemungkinan utama:
+1. Pengguna melakukan pelanggaran
+2. Terjadi kesalahan sistem (false detection)
+
+Selain itu, kami juga menemukan adanya indikasi manipulasi oleh pihak tertentu yang memanfaatkan celah perilaku pengguna.
+
+Berikut beberapa penyebab yang berpotensi menyebabkan banned permanen:
+
+`<\ Penyebab Terkena Banned Permanen \>`
+
+1. **Mengakses akun dari perangkat atau WhatsApp lain setelah terkena banned spam**
+Tindakan ini bisa terdeteksi sebagai aktivitas mencurigakan atau spam, sehingga memperbesar kemungkinan banding ditolak dan berakhir permanen.
+
+2. **Melakukan aktivitas spam sebelum banned**
+Contohnya: menambahkan anggota secara berlebihan, spam chat, atau penggunaan fitur tertentu (seperti float chat) yang dianggap melanggar.
+
+*Kasus Khusus*
+
+3. **Meneruskan media yang melanggar**
+Jika kalian meneruskan video atau media tidak senonoh yang kemudian dilaporkan, maka akun bisa terkena banned permanen. Untuk kasus ini, umumnya tidak dapat ditinjau atau dipulihkan karena termasuk pelanggaran langsung oleh pengguna.
+
+---
+
+<\ CONTOH KASUS REAL DI LAPANGAN \>
+
+Berdasarkan laporan dari kurang lebih 20 pengguna berbeda, ditemukan pola kejadian sebagai berikut:
+
+**1. Modus jebakan penerusan media**
+Pelaku masuk ke dalam grup, kemudian:
+* Berusaha mendapatkan kepercayaan
+* Meminta bantuan untuk meneruskan media
+Permasalahan terjadi karena media tersebut tampak normal di awal, namun pada bagian tertentu mengandung konten yang melanggar kebijakan. Akibatnya, pengguna yang meneruskan media tersebut dianggap sebagai pengirim konten pelanggaran dan berisiko terkena banned permanen.
+
+**2. Manipulasi psikologis terhadap admin (social engineering)**
+Pelaku melakukan pendekatan kepada admin dengan cara:
+* Bersikap akrab secara berlebihan
+* Membangun kedekatan dalam waktu singkat
+* Berusaha mendapatkan kepercayaan penuh
+Setelah itu, pelaku mulai:
+* Meminta akses tertentu (seperti admin)
+* Memberikan tekanan jika permintaan tidak dipenuhi
+Teknik yang digunakan antara lain:
+* Guilt manipulation (membuat target merasa bersalah)
+* Pressure tactics (mendesak keputusan cepat)
+* Trust exploitation (memanfaatkan kedekatan palsu)
+Dalam beberapa kasus, pelaku juga melakukan pelaporan atau memancing aktivitas yang dapat menyebabkan akun target terkena banned.
+
+**3. Teknik cloning (penyamaran identitas admin)**
+Metode ini dilakukan dengan meniru identitas korban.
+Alurnya:
+* Target utama (admin) terlebih dahulu dijatuhkan (banned atau kehilangan akses)
+* Pelaku kemudian menyamar sebagai admin tersebut
+Metode yang digunakan:
+* Menggunakan nama dan foto yang sama
+* Meniru gaya komunikasi
+* Dalam beberapa kasus, memanfaatkan teknologi untuk meniru suara korban
+Target berikutnya adalah pihak terdekat korban, seperti co-admin atau anggota lama.
+Tujuannya: Meminta akses admin dengan alasan darurat. Jika berhasil: Grup dapat diambil alih (kudeta), admin asli kehilangan kendali sepenuhnya.
+
+**Kasus Umum: Kudeta Grup**
+Kami menemukan banyak kasus di mana pemilik grup menjadi target. Pola yang terjadi: Grup dibuat oleh korban, pelaku tidak dapat mengambil alih secara langsung, akun korban dijatuhkan terlebih dahulu. Setelah korban kehilangan akses, grup diambil alih oleh pihak lain. Hal ini menunjukkan bahwa risiko tidak hanya berasal dari sistem, tetapi juga dari manipulasi terhadap pengguna.
+
+---
+
+**Referensi:**
+https://faq.whatsapp.com/465883178708358/?helpref=hc_fnav
+
+**Saran:**
+Periksa terlebih dahulu isi media sebelum meneruskan. Jika mencurigakan, laporkan akun tersebut. Dalam beberapa kasus, pelaku justru menjebak pengguna lain agar ikut terkena pelanggaran (“senjata makan tuan”).
+
+---
+
+<\ Penyelesaian Masalah \>
+
+**[!] BANNED SPAM / TINJAU**
+Jika mengalami banned jenis ini:
+* Tunggu sekitar 5–6 menit sebelum menekan Minta Tinjau
+* Setelah itu, ajukan peninjauan
+* Jika dalam 1–5 menit status tidak berubah menjadi Daftarkan nomor baru, maka kemungkinan akun masih bisa dipulihkan.
+* Estimasi pemulihan: sekitar 6–9 jam (mengikuti waktu sistem pusat).
+
+**[!] BANNED PERMANEN**
+Jika merasa tidak melakukan pelanggaran, bisa mencoba langkah berikut:
+
+*Langkah-langkah:*
+1. Buka halaman berikut:
+https://www.whatsapp.com/contact/?eea=1&subject=messenger&form_type=accessibility
+atau
+https://www.whatsapp.com/contact/?subject=messenger
+
+2. Isi nomor yang terkena banned dan email aktif
+3. Pada bagian keluhan, gunakan teks berikut:
+
+`Teks Unbanned By PutramodsTzy`
+> Hello, WhatsApp Support Team Manager Greetings After presenting you with this security report, which I realized, was exploited for personal purposes and harming its users This security breach did not please me, as I found a security flaw, which is a copy of WhatsApp which has been fully decrypted and this version works on the ban and that by typing The number is three times, and here is a link to an explanation which you can find on YouTube https://youtube/C3XmFJWMRbU The second security vulnerability, of which there are many copies of WhatsApp Business or Messenger, modified and decrypted, and these copies work in contrast to the messages, then the person is reported, and here is a link to Wassef on YouTube https://youtube/zLFadZIZzB8 These security vulnerabilities have harmed many WhatsApp users We ask that you resolve this security vulnerability that has affected WhatsApp users and if I do not find any answer or solution to this security breach within WhatsApp, I will go to the head of state and the owner of the WhatsApp company and sue him +62xxx ( Isi nomor kalian )
+
+4. Kirim dan tunggu respon dari pihak WhatsApp. Keputusan akhir tetap bergantung pada hasil evaluasi dari pihak WhatsApp.
+
+**[!] BANNED PERMANEN (MEDIA)**
+Jika banned disebabkan oleh penerusan media yang melanggar, kemungkinan besar tidak dapat dipulihkan.
+
+---
+
+<\ PENUTUP \>
+Sebarkan informasi ini ke grup dan teman kalian agar lebih waspada.
+Mohon maaf jika terdapat kesalahan dalam penulisan.
+
+Kami dari VYN GROUP pamit undur diri.
+
+**Sumber informasi:**
+https://channel.whatsapp.com/
+
+**Thanks To:**
+* Allah
+* PutraMods
+* XynnHd
+* XynaTzy
+* Seluruh Member VYN</div>
             
-            <button id="saveBtn" class="btn-action" style="display:none; margin-top:20px; width:auto; padding:10px 30px;" onclick="saveContent()">Simpan Perubahan</button>
+            <!-- AREA EDIT (HANYA ADMIN) -->
+            <textarea id="editArea"></textarea>
         </div>
     </div>
 
-    <!-- Modal Admin -->
-    <div class="modal-overlay" id="adminModal">
-        <div class="modal-card" id="modalCard">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px">
-                <h3 id="modalTitle">Otorisasi</h3>
-                <i data-lucide="x" onclick="closeModal()" style="cursor:pointer"></i>
-            </div>
-
-            <div class="login-form">
-                <input type="password" id="passInput" placeholder="Password Admin">
-                <button class="btn-action" onclick="handleLogin()">Login</button>
-            </div>
-
-            <div class="admin-dashboard">
-                <p style="margin-bottom:20px">Sesi Admin Aktif</p>
-                <button class="btn-action" style="background:#222; color:#fff; margin-bottom:10px" onclick="enableEdit()">✍️ Edit Konten</button>
-                <button class="btn-action" onclick="handleLogout()" style="background:transparent; color:#ff4444">Logout</button>
-            </div>
+    <!-- Modal Login -->
+    <div class="modal" id="loginModal">
+        <div class="modal-box">
+            <h3 style="margin-bottom:10px">Otorisasi Sesi</h3>
+            <input type="password" id="passInput" placeholder="Password Admin">
+            <button class="btn-save" style="width:100%" onclick="login()">Buka Dashboard</button>
+            <p onclick="closeModal()" style="margin-top:15px; font-size:12px; color:var(--text-p); cursor:pointer">Batalkan</p>
         </div>
     </div>
 
-    <footer>&copy; 2026 PutraMods Informations</footer>
+    <!-- Tombol Simpan -->
+    <div class="save-bar" id="saveBar">
+        <button class="btn-save" onclick="saveGlobal()">Simpan & Publikasikan</button>
+    </div>
+
+    <footer>
+        &copy; 2026 PutraMods Informations &bull; VYN Group Official
+    </footer>
 
     <script>
         lucide.createIcons();
-        const defaultText = `PutraMods Informations hadir sebagai wadah informasi digital yang modern dan efisien. Kami berkomitmen untuk menyajikan konten berkualitas.\n\nGunakan panel admin untuk mengelola konten Anda secara mandiri.`;
-
-        // 1. Load Konten saat web dibuka
-        window.onload = () => {
-            const saved = localStorage.getItem('myPost');
-            document.getElementById('postContent').innerText = saved ? saved : defaultText;
-        };
-
-        // 2. Fungsi Login/Modal
-        function openModal() { document.getElementById('adminModal').style.display = 'flex'; checkLogin(); }
-        function closeModal() { document.getElementById('adminModal').style.display = 'none'; }
         
-        function handleLogin() {
+        // Link Detection & Markdown Simple
+        function formatText(text) {
+            // Convert Links
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            let formatted = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+            // Bold
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            // Italic
+            formatted = formatted.replace(/\*(.*?)\*/g, '<i>$1</i>');
+            // Code
+            formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
+            // Blockquote
+            formatted = formatted.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+            return formatted;
+        }
+
+        // Initialize Content
+        const displayArea = document.getElementById('displayArea');
+        const savedData = localStorage.getItem('global_post');
+        if(savedData) {
+            displayArea.innerHTML = formatText(savedData);
+        } else {
+            // Format teks awal saat pertama kali buka
+            displayArea.innerHTML = formatText(displayArea.innerText);
+        }
+
+        function openModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+        function login() {
             if(document.getElementById('passInput').value === 'admin123') {
-                localStorage.setItem('isAuth', 'true');
-                checkLogin();
-            } else { alert('Salah!'); }
+                closeModal();
+                startEdit();
+            } else { alert('Akses Ditolak!'); }
         }
 
-        function checkLogin() {
-            const auth = localStorage.getItem('isAuth');
-            const card = document.getElementById('modalCard');
-            if(auth === 'true') card.classList.add('is-logged-in');
-            else card.classList.remove('is-logged-in');
+        function startEdit() {
+            const rawText = localStorage.getItem('global_post') || displayArea.innerText;
+            displayArea.style.display = 'none';
+            const area = document.getElementById('editArea');
+            area.style.display = 'block';
+            area.value = rawText.trim();
+            document.getElementById('saveBar').style.display = 'flex';
         }
 
-        function handleLogout() {
-            localStorage.removeItem('isAuth');
-            location.reload();
-        }
-
-        // 3. FUNGSI EDIT (YANG DIPERBAIKI)
-        function enableEdit() {
-            closeModal(); // Tutup modal biar kelihatan editnya
-            const contentDiv = document.getElementById('postContent');
-            const editArea = document.getElementById('editArea');
-            const saveBtn = document.getElementById('saveBtn');
-
-            // Pindahkan teks ke textarea
-            editArea.value = contentDiv.innerText;
+        function saveGlobal() {
+            const newContent = document.getElementById('editArea').value;
+            // Di Vercel murni, kita pakai localStorage. 
+            // Untuk benar-benar dilihat orang lain, Anda harus mengedit file index.html ini
+            // dan mem-push ke GitHub setiap ada perubahan teks.
+            localStorage.setItem('global_post', newContent);
             
-            // Tukar tampilan
-            contentDiv.style.display = 'none';
-            editArea.style.display = 'block';
-            saveBtn.style.display = 'block';
-            editArea.focus();
-        }
-
-        function saveContent() {
-            const newText = document.getElementById('editArea').value;
-            localStorage.setItem('myPost', newText); // Simpan ke memory browser
-            
-            // Kembalikan tampilan
-            document.getElementById('postContent').innerText = newText;
-            document.getElementById('postContent').style.display = 'block';
+            displayArea.innerHTML = formatText(newContent);
+            displayArea.style.display = 'block';
             document.getElementById('editArea').style.display = 'none';
-            document.getElementById('saveBtn').style.display = 'none';
+            document.getElementById('saveBar').style.display = 'none';
             
-            alert('Konten berhasil diupdate!');
+            alert('Berhasil! Ingat: Di Vercel Statis, perubahaan permanen publik dilakukan dengan Update Code di GitHub.');
         }
     </script>
 </body>
