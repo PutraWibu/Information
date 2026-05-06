@@ -3,262 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PutraMods Informations | Modern Portal</title>
-    
-    <!-- Google Fonts & Icons -->
+    <title>PutraMods Informations | Professional</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
         :root {
-            --bg: #050505;
-            --surface: #0f0f0f;
-            --border: #1f1f1f;
-            --accent: #ffffff;
-            --text-p: #888888;
-            --text-h: #ffffff;
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg: #050505; --surface: #0f0f0f; --border: #1f1f1f;
+            --accent: #ffffff; --text-p: #888888; --text-h: #ffffff;
+            --transition: all 0.3s ease;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-
-        body { 
-            background: var(--bg); 
-            color: var(--text-h); 
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            position: fixed; top: 0; left: 0; height: 3px;
-            background: var(--accent); width: 0%; z-index: 1001;
-        }
-
-        /* Navbar */
+        body { background: var(--bg); color: var(--text-h); line-height: 1.6; }
+        
         nav {
-            padding: 1.2rem 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            position: sticky; top: 0;
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(20px);
-            z-index: 100;
+            padding: 1.2rem 8%; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border); position: sticky; top: 0;
+            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); z-index: 100;
         }
-
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; text-transform: uppercase; }
-        .logo span { color: var(--text-p); font-weight: 400; }
-
+        .logo { font-weight: 800; font-size: 1.2rem; text-transform: uppercase; }
         .btn-admin {
-            background: var(--accent);
-            color: var(--bg);
-            padding: 10px 20px;
-            border-radius: 100px;
-            font-weight: 700;
-            font-size: 13px;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
+            background: var(--accent); color: var(--bg); padding: 10px 20px;
+            border-radius: 100px; font-weight: 700; border: none; cursor: pointer;
         }
 
-        .btn-admin:hover { transform: scale(1.05); opacity: 0.9; }
-
-        /* Hero & Content */
-        .wrapper { max-width: 800px; margin: 80px auto; padding: 0 24px; }
-
-        .post-label {
-            display: inline-block;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        .title { 
-            font-size: clamp(2.5rem, 8vw, 4.5rem); 
-            line-height: 1; 
-            font-weight: 800; 
-            margin-bottom: 40px; 
-            letter-spacing: -3px; 
-        }
-
+        .wrapper { max-width: 800px; margin: 60px auto; padding: 0 24px; }
+        .title { font-size: 3.5rem; font-weight: 800; margin-bottom: 30px; letter-spacing: -2px; }
+        
+        /* Box Postingan */
         .content-card {
-            background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%);
-            border: 1px solid var(--border);
-            padding: 40px;
-            border-radius: 32px;
-            font-size: 1.1rem;
-            color: #ccc;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 40px; border-radius: 24px; position: relative;
+        }
+        #postContent { white-space: pre-line; color: #ccc; font-size: 1.1rem; }
+        
+        /* Textarea saat edit */
+        #editArea {
+            width: 100%; min-height: 200px; background: #000; color: #fff;
+            border: 1px solid #444; padding: 15px; border-radius: 12px;
+            display: none; font-size: 1.1rem; resize: vertical;
         }
 
-        .text-block { margin-bottom: 20px; white-space: pre-line; }
-
-        /* Modal System */
+        /* Modal */
         .modal-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(5px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
         }
-
         .modal-card {
-            background: var(--surface);
-            width: 90%; max-width: 400px;
-            padding: 30px; border-radius: 24px;
-            border: 1px solid var(--border);
-            text-align: center;
+            background: var(--surface); width: 90%; max-width: 400px;
+            padding: 30px; border-radius: 24px; border: 1px solid var(--border); text-align: center;
         }
-
         input {
-            width: 100%; padding: 15px; margin: 20px 0;
-            background: #000; border: 1px solid var(--border);
-            border-radius: 12px; color: #fff; text-align: center;
+            width: 100%; padding: 15px; margin: 20px 0; background: #000;
+            border: 1px solid var(--border); border-radius: 12px; color: #fff; text-align: center;
         }
-
         .btn-action {
-            width: 100%; padding: 15px; border-radius: 12px;
-            border: none; font-weight: 700; cursor: pointer;
-            background: var(--accent); color: var(--bg);
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            font-weight: 700; cursor: pointer; background: var(--accent); color: var(--bg);
         }
-
-        /* Admin Dashboard View */
+        
         .admin-dashboard { display: none; }
         .is-logged-in .login-form { display: none; }
         .is-logged-in .admin-dashboard { display: block; }
 
-        footer {
-            margin-top: 100px; padding: 40px;
-            border-top: 1px solid var(--border);
-            text-align: center; color: var(--text-p); font-size: 13px;
-        }
-
-        @media (max-width: 600px) {
-            .content-card { padding: 25px; }
-            .title { letter-spacing: -1px; }
-        }
+        footer { text-align: center; padding: 40px; color: var(--text-p); font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <div class="progress-bar" id="bar"></div>
-
     <nav>
-        <div class="logo">PutraMods <span>Informations</span></div>
-        <button class="btn-admin" onclick="openModal()">
-            <i data-lucide="lock" size="14" style="margin-right:5px"></i> Admin
-        </button>
+        <div class="logo">PutraMods</div>
+        <button class="btn-admin" onclick="openModal()">Admin</button>
     </nav>
 
     <div class="wrapper">
-        <span class="post-label">PENGUMUMAN RESMI</span>
-        <h1 class="title">PutraMods Informations</h1>
+        <h1 class="title">Informations</h1>
         
         <div class="content-card">
-            <div class="text-block">
-                PutraMods Informations hadir sebagai wadah informasi digital yang modern dan efisien. 
-                Kami berkomitmen untuk menyajikan konten berkualitas dengan tampilan yang nyaman di mata. 
-                
-                Gunakan panel admin untuk mengelola konten Anda secara mandiri. Desain ini telah dioptimalkan 
-                untuk kecepatan akses dan responsivitas di berbagai perangkat, baik ponsel maupun desktop.
-                
-                Dengan integrasi sistem front-end yang clean, performa situs menjadi sangat ringan dan cepat saat diakses melalui platform seperti Vercel.
-            </div>
+            <!-- Teks Berita -->
+            <div id="postContent">Memuat konten...</div>
+            <!-- Input Edit (Sembunyi secara default) -->
+            <textarea id="editArea"></textarea>
+            
+            <button id="saveBtn" class="btn-action" style="display:none; margin-top:20px; width:auto; padding:10px 30px;" onclick="saveContent()">Simpan Perubahan</button>
         </div>
     </div>
 
-    <!-- Admin Modal -->
+    <!-- Modal Admin -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-card" id="modalCard">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px">
-                <h3 id="modalTitle">Otorisasi Admin</h3>
+                <h3 id="modalTitle">Otorisasi</h3>
                 <i data-lucide="x" onclick="closeModal()" style="cursor:pointer"></i>
             </div>
 
-            <!-- Form Login -->
             <div class="login-form">
-                <p style="color:var(--text-p); font-size:14px">Masukkan password akses (admin123)</p>
-                <input type="password" id="passInput" placeholder="••••••••">
-                <button class="btn-action" onclick="handleLogin()">Masuk Sistem</button>
+                <input type="password" id="passInput" placeholder="Password Admin">
+                <button class="btn-action" onclick="handleLogin()">Login</button>
             </div>
 
-            <!-- Dashboard (Muncul jika sudah login) -->
             <div class="admin-dashboard">
-                <i data-lucide="check-circle" size="48" style="color:#4ade80; margin-bottom:15px"></i>
-                <h4>Sesi Aktif</h4>
-                <p style="color:var(--text-p); font-size:14px; margin-bottom:20px">Anda sedang dalam mode pengembang.</p>
-                <button class="btn-action" style="background:#222; color:#fff; margin-bottom:10px">Edit Konten</button>
-                <button class="btn-action" onclick="handleLogout()" style="background:transparent; color:#ff4444">Keluar Sesi</button>
+                <p style="margin-bottom:20px">Sesi Admin Aktif</p>
+                <button class="btn-action" style="background:#222; color:#fff; margin-bottom:10px" onclick="enableEdit()">✍️ Edit Konten</button>
+                <button class="btn-action" onclick="handleLogout()" style="background:transparent; color:#ff4444">Logout</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        &copy; <span id="year"></span> PutraMods Informations. Hosted on Vercel.
-    </footer>
+    <footer>&copy; 2026 PutraMods Informations</footer>
 
     <script>
-        // Initialize Icons
         lucide.createIcons();
+        const defaultText = `PutraMods Informations hadir sebagai wadah informasi digital yang modern dan efisien. Kami berkomitmen untuk menyajikan konten berkualitas.\n\nGunakan panel admin untuk mengelola konten Anda secara mandiri.`;
 
-        // Scroll Progress
-        window.onscroll = function() {
-            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            let scrolled = (winScroll / height) * 100;
-            document.getElementById("bar").style.width = scrolled + "%";
+        // 1. Load Konten saat web dibuka
+        window.onload = () => {
+            const saved = localStorage.getItem('myPost');
+            document.getElementById('postContent').innerText = saved ? saved : defaultText;
         };
 
-        // Modal Logic
-        const modal = document.getElementById('adminModal');
-        const modalCard = document.getElementById('modalCard');
-
-        function openModal() {
-            modal.style.display = 'flex';
-            checkLoginStatus();
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        // Auth Logic (Client Side)
+        // 2. Fungsi Login/Modal
+        function openModal() { document.getElementById('adminModal').style.display = 'flex'; checkLogin(); }
+        function closeModal() { document.getElementById('adminModal').style.display = 'none'; }
+        
         function handleLogin() {
-            const pass = document.getElementById('passInput').value;
-            if(pass === 'admin123') {
-                localStorage.setItem('putramods_auth', 'true');
-                checkLoginStatus();
-            } else {
-                alert('Password Salah!');
-            }
+            if(document.getElementById('passInput').value === 'admin123') {
+                localStorage.setItem('isAuth', 'true');
+                checkLogin();
+            } else { alert('Salah!'); }
+        }
+
+        function checkLogin() {
+            const auth = localStorage.getItem('isAuth');
+            const card = document.getElementById('modalCard');
+            if(auth === 'true') card.classList.add('is-logged-in');
+            else card.classList.remove('is-logged-in');
         }
 
         function handleLogout() {
-            localStorage.removeItem('putramods_auth');
-            checkLoginStatus();
+            localStorage.removeItem('isAuth');
+            location.reload();
         }
 
-        function checkLoginStatus() {
-            const auth = localStorage.getItem('putramods_auth');
-            if(auth === 'true') {
-                modalCard.classList.add('is-logged-in');
-                document.getElementById('modalTitle').innerText = 'Admin Panel';
-            } else {
-                modalCard.classList.remove('is-logged-in');
-                document.getElementById('modalTitle').innerText = 'Otorisasi';
-            }
+        // 3. FUNGSI EDIT (YANG DIPERBAIKI)
+        function enableEdit() {
+            closeModal(); // Tutup modal biar kelihatan editnya
+            const contentDiv = document.getElementById('postContent');
+            const editArea = document.getElementById('editArea');
+            const saveBtn = document.getElementById('saveBtn');
+
+            // Pindahkan teks ke textarea
+            editArea.value = contentDiv.innerText;
+            
+            // Tukar tampilan
+            contentDiv.style.display = 'none';
+            editArea.style.display = 'block';
+            saveBtn.style.display = 'block';
+            editArea.focus();
         }
 
-        // UI Extras
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Close on outside click
-        window.onclick = (e) => { if(e.target == modal) closeModal(); }
+        function saveContent() {
+            const newText = document.getElementById('editArea').value;
+            localStorage.setItem('myPost', newText); // Simpan ke memory browser
+            
+            // Kembalikan tampilan
+            document.getElementById('postContent').innerText = newText;
+            document.getElementById('postContent').style.display = 'block';
+            document.getElementById('editArea').style.display = 'none';
+            document.getElementById('saveBtn').style.display = 'none';
+            
+            alert('Konten berhasil diupdate!');
+        }
     </script>
 </body>
 </html>
