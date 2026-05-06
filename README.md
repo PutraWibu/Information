@@ -1,2 +1,0 @@
-# Information
-Website information
